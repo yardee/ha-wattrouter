@@ -43,8 +43,10 @@ class MeasurementData:
 # class syntax
 class TimePlanState(Enum):
     NOT_SET = 0
-    LIMIT = 1
+    RESTRICT = 1
     ENFORCE = 2
+
+
 
 
 @dataclass
@@ -57,21 +59,25 @@ class TimePlanSettings:
     power_percentage: int
     energy_limit: float
     temperature_input: int
-    temperature_limit: float
+    temperature_threshold: float
+    temperature_control: bool
+    temperature_is_lower: bool
+    iso_week_days: array
+    low_tariff: bool
 
 
 @dataclass
 class SettingsData:
     """Class for keeping track of date prices."""
 
-    time_plans_ssr1: array(TimePlanSettings)
-    time_plans_ssr2: array(TimePlanSettings)
-    time_plans_ssr3: array(TimePlanSettings)
-    time_plans_ssr4: array(TimePlanSettings)
-    time_plans_ssr5: array(TimePlanSettings)
-    time_plans_ssr6: array(TimePlanSettings)
-    time_plans_rele1: array(TimePlanSettings)
-    time_plans_rele2: array(TimePlanSettings)
+    time_plans_ssr1: array
+    time_plans_ssr2: array
+    time_plans_ssr3: array
+    time_plans_ssr4: array
+    time_plans_ssr5: array
+    time_plans_ssr6: array
+    time_plans_rele1: array
+    time_plans_rele2: array
 
 
 """

@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET
 from array import array
 
+from custom_components.wattrouter.time_schedule_mode_parser import parse_time_schedule
+
 from .state import (
     MeasurementData,
     SSRState,
@@ -46,7 +48,7 @@ class XmlParser:
     def parse_setting(self, xml: str) -> SettingsData:
         root = ET.fromstring(xml)
         return SettingsData(
-            time_plans_ssr1=self.get_time_plans("O1", root),
+            time_plans_ssr1=self.get_time_plans("TS1", root),
             time_plans_ssr2=self.get_time_plans("O1", root),
             time_plans_ssr3=self.get_time_plans("O1", root),
             time_plans_ssr4=self.get_time_plans("O1", root),
@@ -56,21 +58,19 @@ class XmlParser:
             time_plans_rele2=self.get_time_plans("O1", root),
         )
 
-    def get_time_plans(
-        self, input_name: str, root: ET.Element
-    ) -> array(TimePlanSettings):
+    def get_time_plans(self, input_name: str, root: ET.Element) -> array:
         time_plans = []
-        for i in [1, 2, 3, 4, 5, 6]:
+        for i in [1, 2, 3, 4]:
             time_plan = root.find(f"{input_name}{i}")
             time_plans.append(
-                TimePlanSettings(
-                    state=TimePlanState(int(time_plan.find("M").text)),
-                    start=time_plan.find("N").text,
-                    end=time_plan.find("F").text,
-                    energy_limit=float(time_plan.find("Li").text),
-                    power_percentage=float(time_plan.find("P").text),
-                    temperature_input=int(time_plan.find("TI").text),
-                    temperature_limit=float(time_plan.find("TT").text),
+                parse_time_schedule(
+                    int(time_plan.find("M").text),
+                    time_plan.find("N").text,
+                    time_plan.find("F").text,
+                    float(time_plan.find("Li").text),
+                    float(time_plan.find("P").text),
+                    int(time_plan.find("TI").text),
+                    float(time_plan.find("TT").text),
                 )
             )
 
