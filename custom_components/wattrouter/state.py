@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 import time
 from array import array
+from typing import List
 
 
 @dataclass
@@ -47,22 +48,22 @@ class TimePlanState(Enum):
     ENFORCE = 2
 
 
-
-
 @dataclass
 class TimePlanSettings:
     """Time plan setting in Wattrouter."""
 
+    name: str
     state: TimePlanState
     start: time
     end: time
     power_percentage: int
     energy_limit: float
+    energy_limit_active: bool
     temperature_input: int
     temperature_threshold: float
     temperature_control: bool
     temperature_is_lower: bool
-    iso_week_days: array
+    iso_week_days: List[int]
     low_tariff: bool
 
 
@@ -70,14 +71,7 @@ class TimePlanSettings:
 class SettingsData:
     """Class for keeping track of date prices."""
 
-    time_plans_ssr1: array
-    time_plans_ssr2: array
-    time_plans_ssr3: array
-    time_plans_ssr4: array
-    time_plans_ssr5: array
-    time_plans_ssr6: array
-    time_plans_rele1: array
-    time_plans_rele2: array
+    time_plans: List[TimePlanSettings]
 
 
 """

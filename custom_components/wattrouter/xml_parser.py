@@ -1,7 +1,10 @@
 import xml.etree.ElementTree as ET
 from array import array
 
-from custom_components.wattrouter.time_schedule_mode_parser import parse_time_schedule
+from custom_components.wattrouter.time_schedule_mode_parser import (
+    TimeScheduleArgs,
+    parse_time_schedule,
+)
 
 from .state import (
     MeasurementData,
@@ -47,31 +50,27 @@ class XmlParser:
 
     def parse_setting(self, xml: str) -> SettingsData:
         root = ET.fromstring(xml)
-        return SettingsData(
-            time_plans_ssr1=self.get_time_plans("TS1", root),
-            time_plans_ssr2=self.get_time_plans("O1", root),
-            time_plans_ssr3=self.get_time_plans("O1", root),
-            time_plans_ssr4=self.get_time_plans("O1", root),
-            time_plans_ssr5=self.get_time_plans("O1", root),
-            time_plans_ssr6=self.get_time_plans("O1", root),
-            time_plans_rele1=self.get_time_plans("O1", root),
-            time_plans_rele2=self.get_time_plans("O1", root),
-        )
+        return SettingsData(time_plans=self.get_time_plans(root))
 
-    def get_time_plans(self, input_name: str, root: ET.Element) -> array:
+    def get_time_plans(self, root: ET.Element) -> array:
         time_plans = []
-        for i in [1, 2, 3, 4]:
-            time_plan = root.find(f"{input_name}{i}")
-            time_plans.append(
-                parse_time_schedule(
-                    int(time_plan.find("M").text),
-                    time_plan.find("N").text,
-                    time_plan.find("F").text,
-                    float(time_plan.find("Li").text),
-                    float(time_plan.find("P").text),
-                    int(time_plan.find("TI").text),
-                    float(time_plan.find("TT").text),
+        for ssr_index in range(1, 17):
+            for plan_index in range(1, 5):
+                name = f"TS{ssr_index}{plan_index}"
+                time_plan = root.find(name)
+                time_plans.append(
+                    parse_time_schedule(
+                        TimeScheduleArgs(
+                            name=name,
+                            mode=int(time_plan.find("M").text),
+                            start_str=time_plan.find("N").text,
+                            end_str=time_plan.find("F").text,
+                            energy_limit=float(time_plan.find("Li").text),
+                            power_percentage=float(time_plan.find("P").text),
+                            temperature_input=int(time_plan.find("TI").text),
+                            temperature_threshold=float(time_plan.find("TT").text),
+                        )
+                    )
                 )
-            )
 
         return time_plans

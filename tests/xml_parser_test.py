@@ -1,3 +1,4 @@
+from custom_components.wattrouter.state import TimePlanState
 from custom_components.wattrouter.xml_parser import XmlParser
 
 
@@ -41,10 +42,12 @@ def test_parse_measurement_should_parse_ssrs():
         assert measurement.ssr3.power == 0.20
         assert measurement.ssr3.energy == 1.68
 
-'''def test_parse_setting_should_parse_ssr1_time_plans():
+
+def test_parse_setting_should_parse_ssr1_time_plans():
     with open("tests/configuration1.xml", "r", encoding="utf8") as file:
         xml = file.read()
         configuration = XmlParser().parse_setting(xml)
 
-        assert configuration.time_plans_ssr1.count() == 4'''
-
+        assert len(configuration.time_plans) == 64
+        assert configuration.time_plans[0].name == "TS11"
+        assert configuration.time_plans[0].state == TimePlanState.RESTRICT

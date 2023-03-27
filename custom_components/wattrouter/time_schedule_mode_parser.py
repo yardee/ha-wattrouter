@@ -1,41 +1,45 @@
 import array
-from enum import Flag, auto
 import time
 import datetime
+
+from attr import dataclass
 from .state import (
-    MeasurementData,
-    SSRState,
-    SettingsData,
     TimePlanSettings,
     TimePlanState,
 )
 
 
-def parse_time_schedule(
-    mode: int,
-    start_str: str,
-    end_str: str,
-    energy_limit: int,
-    power_percentage: int,
-    temperature_input: int,
-    temperature_threshold: int,
-) -> TimePlanSettings:
+@dataclass
+class TimeScheduleArgs:
+    name: str
+    mode: int
+    start_str: str
+    end_str: str
+    energy_limit: int
+    power_percentage: int
+    temperature_input: int
+    temperature_threshold: int
+
+
+def parse_time_schedule(args: TimeScheduleArgs) -> TimePlanSettings:
     return TimePlanSettings(
+        name=args.name,
         state=TimePlanState.ENFORCE
-        if has_flag(mode, TIME_MODE_ENFORCE)
+        if has_flag(args.mode, TIME_MODE_ENFORCE)
         else TimePlanState.RESTRICT
-        if has_flag(mode, TIME_MODE_RESTRICT)
+        if has_flag(args.mode, TIME_MODE_RESTRICT)
         else TimePlanState.NOT_SET,
-        start=parse_time(start_str),
-        end=parse_time(end_str),
-        energy_limit=energy_limit,
-        power_percentage=power_percentage,
-        temperature_input=temperature_input,
-        temperature_threshold=temperature_threshold,
-        temperature_control=has_flag(mode, TIME_COND_TEMP),
-        temperature_is_lower=has_flag(mode, TIME_COND_TEMP_BELOW),
-        iso_week_days=get_iso_week_days(mode),
-        low_tariff=has_flag(mode, TIME_COND_LT),
+        start=parse_time(args.start_str),
+        end=parse_time(args.end_str),
+        power_percentage=args.power_percentage,
+        temperature_input=args.temperature_input,
+        temperature_threshold=args.temperature_threshold,
+        temperature_control=has_flag(args.mode, TIME_COND_TEMP),
+        temperature_is_lower=has_flag(args.mode, TIME_COND_TEMP_BELOW),
+        iso_week_days=get_iso_week_days(args.mode),
+        low_tariff=has_flag(args.mode, TIME_COND_LT),
+        energy_limit_active=has_flag(args.mode, TIME_COND_ENERGY),
+        energy_limit=args.energy_limit,
     )
 
 
