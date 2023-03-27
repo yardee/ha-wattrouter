@@ -34,6 +34,7 @@ class WattrouterUpdateCoordinator(DataUpdateCoordinator[WattrouterStateData]):
         try:
             state = WattrouterStateData(
                 measurement=await self.api.get_measurement(),
+                settings=await self.api.get_configuration(),
             )
             return state
         except Exception as exception:

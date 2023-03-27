@@ -39,22 +39,51 @@ class WattrouterApiClient:
         self.parser = XmlParser()
 
     async def get_configuration(self) -> SettingsData:
-        return await self._session.get(self.settings.url + "/conf.xml")
-
-    async def get_measurement(self) -> MeasurementData:
-        url = self.settings.url + "/meas.xml"
-        print(url)
+        url = self.settings.url + "/conf.xml"
         try:
             async with async_timeout.timeout(TIMEOUT):
-                return self.parser.parse_measurement(test_xml)
                 response = await self._session.get(
                     url, headers={"Accept": "application/xml"}
                 )
 
-                print("response")
-                print(response)
                 response_text = await response.text()
-                print(response_text)
+                return self.parser.parse_setting(response_text)
+
+        except asyncio.TimeoutError as exception:
+            _LOGGER.error(
+                "Timeout error fetching information from %s - %s",
+                url,
+                exception,
+            )
+
+        except (KeyError, TypeError) as exception:
+            _LOGGER.error(
+                "Error parsing information from %s - %s",
+                url,
+                exception,
+            )
+        except (aiohttp.ClientError, socket.gaierror) as exception:
+            _LOGGER.error(
+                "Error fetching information from %s - %s",
+                url,
+                exception,
+            )
+        except Exception as exception:  # pylint: disable=broad-except
+            _LOGGER.error(
+                "Error fetching information from %s - %s",
+                url,
+                exception,
+            )
+
+    async def get_measurement(self) -> MeasurementData:
+        url = self.settings.url + "/meas.xml"
+        try:
+            async with async_timeout.timeout(TIMEOUT):
+                response = await self._session.get(
+                    url, headers={"Accept": "application/xml"}
+                )
+
+                response_text = await response.text()
                 return self.parser.parse_measurement(response_text)
 
         except asyncio.TimeoutError as exception:
