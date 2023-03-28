@@ -31,8 +31,8 @@ class MeasurementData:
     ssr4: SSRState
     ssr5: SSRState
     ssr6: SSRState
-    rele1: SSRState
-    rele2: SSRState
+    relay1: SSRState
+    relay2: SSRState
 
     temperature1: float
     temperature2: float
@@ -103,8 +103,8 @@ class DayStats:
     SSR4_energy: float
     SSR5_energy: float
     SSR6_energy: float
-    rele1_energy: float
-    rele2_energy: float
+    relay1_energy: float
+    relay2_energy: float
     wsl1_energy: float
     wsl2_energy: float
     wsl3_energy: float

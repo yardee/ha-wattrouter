@@ -203,6 +203,14 @@ sensors = [
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
+        key="total_forward_energy",
+        name="Total Forward Energy",
+        state_getter=lambda s: s.day_stats.total_forward_high_tariff_energy
+        + s.day_stats.total_forward_low_tariff_energy,
+        unit_of_measurement=KILO_WATT_HOUR,
+        device_class=SensorDeviceClass.ENERGY,
+    ),
+    BaseWattrouterSensorEntityDescription(
         key="L1_production_energy",
         name="L1 Production Energy",
         state_getter=lambda s: s.day_stats.L1_production_energy,
@@ -273,16 +281,16 @@ sensors = [
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
-        key="rele1_energy",
-        name="rele1 Energy",
-        state_getter=lambda s: s.day_stats.rele1_energy,
+        key="relay1_energy",
+        name="relay1 Energy",
+        state_getter=lambda s: s.day_stats.relay1_energy,
         unit_of_measurement=KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
-        key="rele2_energy",
-        name="rele2 Energy",
-        state_getter=lambda s: s.day_stats.rele2_energy,
+        key="relay2_energy",
+        name="relay2 Energy",
+        state_getter=lambda s: s.day_stats.relay2_energy,
         unit_of_measurement=KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
