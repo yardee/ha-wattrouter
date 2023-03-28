@@ -15,6 +15,7 @@ from .state import (
     SettingsData,
     TimePlanSettings,
     TimePlanState,
+    DayStats,
 )
 from .settings import WattrouterSettings
 from .xml_parser import XmlParser
@@ -39,44 +40,22 @@ class WattrouterApiClient:
         self.parser = XmlParser()
 
     async def get_configuration(self) -> SettingsData:
-        url = self.settings.url + "/conf.xml"
-        try:
-            async with async_timeout.timeout(TIMEOUT):
-                response = await self._session.get(
-                    url, headers={"Accept": "application/xml"}
-                )
-
-                response_text = await response.text()
-                return self.parser.parse_setting(response_text)
-
-        except asyncio.TimeoutError as exception:
-            _LOGGER.error(
-                "Timeout error fetching information from %s - %s",
-                url,
-                exception,
-            )
-
-        except (KeyError, TypeError) as exception:
-            _LOGGER.error(
-                "Error parsing information from %s - %s",
-                url,
-                exception,
-            )
-        except (aiohttp.ClientError, socket.gaierror) as exception:
-            _LOGGER.error(
-                "Error fetching information from %s - %s",
-                url,
-                exception,
-            )
-        except Exception as exception:  # pylint: disable=broad-except
-            _LOGGER.error(
-                "Error fetching information from %s - %s",
-                url,
-                exception,
-            )
+        """Get Wattrouter configuration."""
+        response_text = await self.__fetch_data("/conf.xml")
+        return self.parser.parse_setting(response_text)
 
     async def get_measurement(self) -> MeasurementData:
-        url = self.settings.url + "/meas.xml"
+        """Get Wattrouter measurement data."""
+        response_text = await self.__fetch_data("/meas.xml")
+        return self.parser.parse_measurement(response_text)
+
+    async def get_day_stats(self, minus_days: int = 0) -> DayStats:
+        """Get Wattrouter measurement data."""
+        response_text = await self.__fetch_data(f"/stat_day.xml?day={minus_days}")
+        return self.parser.parse_day_stats(response_text)
+
+    async def __fetch_data(self, endpoint: str) -> MeasurementData:
+        url = self.settings.url + endpoint
         try:
             async with async_timeout.timeout(TIMEOUT):
                 response = await self._session.get(
@@ -84,7 +63,7 @@ class WattrouterApiClient:
                 )
 
                 response_text = await response.text()
-                return self.parser.parse_measurement(response_text)
+                return response_text
 
         except asyncio.TimeoutError as exception:
             _LOGGER.error(

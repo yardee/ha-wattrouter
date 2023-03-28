@@ -35,6 +35,7 @@ class WattrouterUpdateCoordinator(DataUpdateCoordinator[WattrouterStateData]):
             state = WattrouterStateData(
                 measurement=await self.api.get_measurement(),
                 settings=await self.api.get_configuration(),
+                day_stats=await self.api.get_day_stats(),
             )
             return state
         except Exception as exception:
