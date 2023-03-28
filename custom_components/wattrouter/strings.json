@@ -1,0 +1,14 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Define Wattrouter credentials",
+        "data": {
+          "CONF_URL": "URL of Wattrouter",
+          "CONF_USERNAME": "Username",
+          "CONF_PASSWORD": "Password"
+        }
+      }
+    }
+  }
+}
