@@ -1,13 +1,14 @@
 import logging
+from typing import TypeVar
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.components.sensor import (
     SensorEntity,
-    SensorEntityDescription,
+    SensorDeviceClass,
 )
-from dataclasses import dataclass
-from .const import DOMAIN, WATT, WATT_HOUR, KILO_WATT, KILO_WATT_HOUR
-from .state import SSRState
+from homeassistant.const import UnitOfTemperature, UnitOfPower, UnitOfEnergy
+
+from .const import DOMAIN
 from .entity import (
     BaseWattrouterSensorEntityDescription,
     IntegrationWattrouterEntity,
@@ -15,14 +16,6 @@ from .entity import (
 )
 from .coordinator import WattrouterUpdateCoordinator
 
-from typing import Callable, TypeVar
-from datetime import datetime
-from homeassistant.components.sensor import (
-    SensorDeviceClass,
-)
-from homeassistant.components.sensor import (
-    SensorEntity,
-)
 
 T = TypeVar("T")
 
@@ -53,7 +46,7 @@ async def async_setup_entry(
                     key=f"ssr{i}_energy",
                     name=f"SSR{i} Energy",
                     state_getter=lambda s: s.energy,
-                    unit_of_measurement=KILO_WATT_HOUR,
+                    unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
                     device_class=SensorDeviceClass.ENERGY,
                 ),
                 config_entry=entry,
@@ -68,7 +61,7 @@ async def async_setup_entry(
                     key=f"ssr{i}_power",
                     name=f"SSR{i} Power",
                     state_getter=lambda s: s.power,
-                    unit_of_measurement=KILO_WATT,
+                    unit_of_measurement=UnitOfPower.KILO_WATT,
                     device_class=SensorDeviceClass.POWER,
                 ),
                 config_entry=entry,
@@ -83,21 +76,21 @@ sensors = [
         key="i1_power",
         name="I1 Power",
         state_getter=lambda s: s.measurement.i1_power,
-        unit_of_measurement=WATT,
+        unit_of_measurement=UnitOfPower.WATT,
         device_class=SensorDeviceClass.POWER,
     ),
     BaseWattrouterSensorEntityDescription(
         key="i2_power",
         name="I2 Power",
         state_getter=lambda s: s.measurement.i2_power,
-        unit_of_measurement=WATT,
+        unit_of_measurement=UnitOfPower.WATT,
         device_class=SensorDeviceClass.POWER,
     ),
     BaseWattrouterSensorEntityDescription(
         key="i3_power",
         name="I3 Power",
         state_getter=lambda s: s.measurement.i3_power,
-        unit_of_measurement=WATT,
+        unit_of_measurement=UnitOfPower.WATT,
         device_class=SensorDeviceClass.POWER,
     ),
     BaseWattrouterSensorEntityDescription(
@@ -106,7 +99,7 @@ sensors = [
         state_getter=lambda s: s.measurement.i1_power
         + s.measurement.i2_power
         + s.measurement.i3_power,
-        unit_of_measurement=WATT,
+        unit_of_measurement=UnitOfPower.WATT,
         device_class=SensorDeviceClass.POWER,
     ),
     BaseWattrouterSensorEntityDescription(
@@ -115,91 +108,91 @@ sensors = [
         state_getter=lambda s: s.measurement.i1_power
         + s.measurement.i2_power
         + s.measurement.i3_power,
-        unit_of_measurement=WATT,
+        unit_of_measurement=UnitOfPower.WATT,
         device_class=SensorDeviceClass.POWER,
     ),
     BaseWattrouterSensorEntityDescription(
         key="L1_reverse_energy",
         name="L1 Reverse Energy",
         state_getter=lambda s: s.day_stats.L1_reverse_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="L2_reverse_energy",
         name="L2 Reverse Energy",
         state_getter=lambda s: s.day_stats.L2_reverse_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="L3_reverse_energy",
         name="L3 Reverse Energy",
         state_getter=lambda s: s.day_stats.L3_reverse_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="total_reverse_energy",
         name="Total Reverse Energy",
         state_getter=lambda s: s.day_stats.total_reverse_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="L1_forward_low_tariff_energy",
         name="L1 Forward Low Tariff Energy",
         state_getter=lambda s: s.day_stats.L1_forward_low_tariff_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="L2_forward_low_tariff_energy",
         name="L2 Forward Low Tariff Energy",
         state_getter=lambda s: s.day_stats.L2_forward_low_tariff_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="L3_forward_low_tariff_energy",
         name="L3 Forward Low Tariff Energy",
         state_getter=lambda s: s.day_stats.L3_forward_low_tariff_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="total_forward_low_tariff_energy",
         name="Total Forward Low Tariff Energy",
         state_getter=lambda s: s.day_stats.total_forward_low_tariff_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="L1_forward_high_tariff_energy",
         name="L1 Forward High Tariff Energy",
         state_getter=lambda s: s.day_stats.L1_forward_high_tariff_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="L2_forward_high_tariff_energy",
         name="L2 Forward High Tariff Energy",
         state_getter=lambda s: s.day_stats.L2_forward_high_tariff_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="L3_forward_high_tariff_energy",
         name="L3 Forward High Tariff Energy",
         state_getter=lambda s: s.day_stats.L3_forward_high_tariff_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="total_forward_high_tariff_energy",
         name="Total Forward High Tariff Energy",
         state_getter=lambda s: s.day_stats.total_forward_high_tariff_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
@@ -207,162 +200,190 @@ sensors = [
         name="Total Forward Energy",
         state_getter=lambda s: s.day_stats.total_forward_high_tariff_energy
         + s.day_stats.total_forward_low_tariff_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="L1_production_energy",
         name="L1 Production Energy",
         state_getter=lambda s: s.day_stats.L1_production_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="L2_production_energy",
         name="L2 Production Energy",
         state_getter=lambda s: s.day_stats.L2_production_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="L3_production_energy",
         name="L3 Production Energy",
         state_getter=lambda s: s.day_stats.L3_production_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="total_production_energy",
         name="Total Production Energy",
         state_getter=lambda s: s.day_stats.total_production_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="SSR1_energy",
         name="SSR1 Energy",
         state_getter=lambda s: s.day_stats.SSR1_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="SSR2_energy",
         name="SSR2 Energy",
         state_getter=lambda s: s.day_stats.SSR2_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="SSR3_energy",
         name="SSR3 Energy",
         state_getter=lambda s: s.day_stats.SSR3_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="SSR4_energy",
         name="SSR4 Energy",
         state_getter=lambda s: s.day_stats.SSR4_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="SSR5_energy",
         name="SSR5 Energy",
         state_getter=lambda s: s.day_stats.SSR5_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="SSR6_energy",
         name="SSR6 Energy",
         state_getter=lambda s: s.day_stats.SSR6_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="relay1_energy",
         name="relay1 Energy",
         state_getter=lambda s: s.day_stats.relay1_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="relay2_energy",
         name="relay2 Energy",
         state_getter=lambda s: s.day_stats.relay2_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="wsl1_energy",
         name="WSL1 Energy",
         state_getter=lambda s: s.day_stats.wsl1_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="wsl2_energy",
         name="WSL2 Energy",
         state_getter=lambda s: s.day_stats.wsl2_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="wsl3_energy",
         name="WSL3 Energy",
         state_getter=lambda s: s.day_stats.wsl3_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="wsl4_energy",
         name="WSL4 Energy",
         state_getter=lambda s: s.day_stats.wsl4_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="wsl5_energy",
         name="WSL5 Energy",
         state_getter=lambda s: s.day_stats.wsl5_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="wsl6_energy",
         name="WSL6 Energy",
         state_getter=lambda s: s.day_stats.wsl6_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="andi1_energy",
         name="ANDI1 Energy",
         state_getter=lambda s: s.day_stats.andi1_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="andi2_energy",
         name="ANDI2 Energy",
         state_getter=lambda s: s.day_stats.andi2_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="andi3_energy",
         name="ANDI3 Energy",
         state_getter=lambda s: s.day_stats.andi3_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
     ),
     BaseWattrouterSensorEntityDescription(
         key="andi4_energy",
         name="ANDI4 Energy",
         state_getter=lambda s: s.day_stats.andi4_energy,
-        unit_of_measurement=KILO_WATT_HOUR,
+        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
+    ),
+    BaseWattrouterSensorEntityDescription(
+        key="temperature1",
+        name="Temperature 1",
+        state_getter=lambda s: s.measurement.temperature1,
+        unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+    ),
+    BaseWattrouterSensorEntityDescription(
+        key="temperature2",
+        name="Temperature 2",
+        state_getter=lambda s: s.measurement.temperature2,
+        unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+    ),
+    BaseWattrouterSensorEntityDescription(
+        key="temperature3",
+        name="Temperature 3",
+        state_getter=lambda s: s.measurement.temperature3,
+        unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
+    ),
+    BaseWattrouterSensorEntityDescription(
+        key="temperature4",
+        name="Temperature 4",
+        state_getter=lambda s: s.measurement.temperature4,
+        unit_of_measurement=UnitOfTemperature.CELSIUS,
+        device_class=SensorDeviceClass.TEMPERATURE,
     ),
 ]
 
