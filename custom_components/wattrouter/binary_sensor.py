@@ -97,7 +97,23 @@ async def async_setup_entry(
     async_add_devices(entities)
 
 
-sensors = []
+sensors = [
+    BaseWattrouterSensorEntityDescription(
+        key="low_tariff_active",
+        name="Low tariff active",
+        state_getter=lambda s: s.measurement.low_tariff_active,
+    ),
+    BaseWattrouterSensorEntityDescription(
+        key="test_active",
+        name="Test active",
+        state_getter=lambda s: s.measurement.test_active,
+    ),
+    BaseWattrouterSensorEntityDescription(
+        key="combiwatt_active",
+        name="CombiWATT active",
+        state_getter=lambda s: s.measurement.combiwatt_active,
+    ),
+]
 
 
 class SSRBinarySensorEntity(IntegrationWattrouterEntity, BinarySensorEntity):

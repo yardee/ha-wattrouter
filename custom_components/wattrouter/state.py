@@ -44,6 +44,10 @@ class MeasurementData:
     firmware_version: str
     voltage: float
 
+    low_tariff_active: bool
+    combiwatt_active: bool
+    test_active: bool
+
 
 # class syntax
 class TimePlanState(Enum):
