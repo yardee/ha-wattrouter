@@ -8,7 +8,7 @@ from .state import WattrouterStateData
 from .settings import WattrouterSettings
 from .const import DOMAIN
 
-SCAN_INTERVAL = timedelta(seconds=3)
+SCAN_INTERVAL = timedelta(seconds=1)
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
