@@ -14,7 +14,7 @@ from homeassistant.components.sensor import (
 )
 
 
-from .const import DOMAIN, ATTR_MANUFACTURER, VERSION
+from .const import DOMAIN, ATTR_MANUFACTURER, VERSION, ENTITIES_PREFIX
 from .coordinator import WattrouterUpdateCoordinator
 
 T = TypeVar("T")
@@ -46,21 +46,20 @@ class IntegrationWattrouterEntity(CoordinatorEntity):
     @property
     def key(self):
         """Return a unique key to use for this entity."""
-        return self.entity_description.key
+        return f"{ENTITIES_PREFIX}_{self.entity_description.key}"
 
     @property
     def name(self):
         """Return the name of the sensor."""
-        return self.entity_description.name
+        return f"{ENTITIES_PREFIX} {self.entity_description.name}"
 
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return f"{self.config_entry.entry_id}_{self.entity_description.key}"
+        return f"{self.config_entry.entry_id}_{ENTITIES_PREFIX}_{self.entity_description.key}"
 
     @property
     def device_info(self):
-        coordinator: WattrouterUpdateCoordinator = self.coordinator
         return DeviceInfo(
             name="Wattrouter",
             identifiers={(DOMAIN)},
@@ -76,6 +75,7 @@ class IntegrationWattrouterEntity(CoordinatorEntity):
             "integration": DOMAIN,
         }
         return attributes
+
 
 @dataclass
 class SSRSensorEntityDescription(SensorEntityDescription):
