@@ -60,11 +60,14 @@ class IntegrationWattrouterEntity(CoordinatorEntity):
 
     @property
     def device_info(self):
+        coordinator: WattrouterUpdateCoordinator = self.coordinator
         return DeviceInfo(
             name="Wattrouter",
-            identifiers={(DOMAIN)},
+            identifiers={(DOMAIN, coordinator.data.measurement.serial_number)},
             manufacturer=ATTR_MANUFACTURER,
-            model=VERSION,
+            sw_version=coordinator.data.measurement.firmware_version,
+            model="Watttrouter MX",
+            configuration_url=coordinator.settings.url,
         )
 
     @property

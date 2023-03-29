@@ -24,6 +24,7 @@ class MeasurementData:
     i1_power: float
     i2_power: float
     i3_power: float
+    total_power: float
 
     ssr1: SSRState
     ssr2: SSRState
@@ -38,6 +39,10 @@ class MeasurementData:
     temperature2: float
     temperature3: float
     temperature4: float
+
+    serial_number: str
+    firmware_version: str
+    voltage: float
 
 
 # class syntax
