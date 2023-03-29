@@ -42,4 +42,4 @@ jobs:
           with:
             python-version: "3.x"
         - run: python3 -m pip install pytest
-        - run: pytest tests.py --doctest-modules --junitxml=junit/test-results.xml
+        - run: pytest
