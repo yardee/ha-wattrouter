@@ -35,7 +35,15 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
 
     session = async_get_clientsession(hass)
     client = WattrouterApiClient(session, settings)
+     hub = WattrouterModbusHub(hass, name, host, port, modbus_addr, interface, serial_port, baudrate, scan_interval, plugin, config)
+
     coordinator = WattrouterUpdateCoordinator(hass, client=client, settings=settings)
+
+
+    """Register the hub."""
+    hass.data[DOMAIN][name] = { "hub": hub,  }
+
+
     await coordinator.async_refresh()
 
     if coordinator.last_update_success is False:

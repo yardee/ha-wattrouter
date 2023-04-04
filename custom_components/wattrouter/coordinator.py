@@ -7,6 +7,7 @@ from .api import WattrouterApiClient
 from .state import WattrouterStateData
 from .settings import WattrouterSettings
 from .const import DOMAIN
+from .wattrouter_modbus_hub import WattrouterModbusHub
 
 SCAN_INTERVAL = timedelta(seconds=1)
 
@@ -21,11 +22,13 @@ class WattrouterUpdateCoordinator(DataUpdateCoordinator[WattrouterStateData]):
         hass: HomeAssistant,
         client: WattrouterApiClient,
         settings: WattrouterSettings,
+        modbus_hub: WattrouterModbusHub,
     ) -> None:
         """Initialize."""
         self.api = client
         self.settings = settings
         self.platforms = []
+        self.modbus_hub = modbus_hub
 
         super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
 

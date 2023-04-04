@@ -8,6 +8,6 @@
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/yardee/ha-wattrouter/issues",
-  "requirements": ["requests", "aiohttp", "asyncio"],
+  "requirements": ["requests", "aiohttp", "asyncio", "pymodbus"],
   "version": "0.1.0"
 }
