@@ -6,6 +6,8 @@ from homeassistant.components.sensor import (
     SensorEntity,
     SensorDeviceClass,
 )
+
+from homeassistant.components.modbus import ModbusHub
 from homeassistant.const import UnitOfTemperature, UnitOfPower, UnitOfEnergy
 
 from .const import DOMAIN
@@ -76,39 +78,28 @@ sensors = [
         key="i1_power",
         name="I1 Power",
         state_getter=lambda s: s.measurement.i1_power,
-        unit_of_measurement=UnitOfPower.WATT,
+        unit_of_measurement=UnitOfPower.KILO_WATT,
         device_class=SensorDeviceClass.POWER,
     ),
     BaseWattrouterSensorEntityDescription(
         key="i2_power",
         name="I2 Power",
         state_getter=lambda s: s.measurement.i2_power,
-        unit_of_measurement=UnitOfPower.WATT,
+        unit_of_measurement=UnitOfPower.KILO_WATT,
         device_class=SensorDeviceClass.POWER,
     ),
     BaseWattrouterSensorEntityDescription(
         key="i3_power",
         name="I3 Power",
         state_getter=lambda s: s.measurement.i3_power,
-        unit_of_measurement=UnitOfPower.WATT,
+        unit_of_measurement=UnitOfPower.KILO_WATT,
         device_class=SensorDeviceClass.POWER,
     ),
     BaseWattrouterSensorEntityDescription(
         key="i_total_power",
         name="I Total Power",
-        state_getter=lambda s: s.measurement.i1_power
-        + s.measurement.i2_power
-        + s.measurement.i3_power,
-        unit_of_measurement=UnitOfPower.WATT,
-        device_class=SensorDeviceClass.POWER,
-    ),
-    BaseWattrouterSensorEntityDescription(
-        key="i_total_power",
-        name="I Total Power",
-        state_getter=lambda s: s.measurement.i1_power
-        + s.measurement.i2_power
-        + s.measurement.i3_power,
-        unit_of_measurement=UnitOfPower.WATT,
+        state_getter=lambda s: s.measurement.total_power,
+        unit_of_measurement=UnitOfPower.KILO_WATT,
         device_class=SensorDeviceClass.POWER,
     ),
     BaseWattrouterSensorEntityDescription(
@@ -429,6 +420,7 @@ class BaseWattrouterSensorEntity(IntegrationWattrouterEntity, SensorEntity):
     @property
     def native_value(self):
         """Return the native value of the sensor."""
+
         coordinator: WattrouterUpdateCoordinator = self.coordinator
         if callable(self.entity_description.state_getter):
             return self.entity_description.state_getter(coordinator.data)
