@@ -1,4 +1,5 @@
 """OteEntity class"""
+from dataclasses import dataclass
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.entity import DeviceInfo
@@ -6,10 +7,9 @@ from .state import WattrouterStateData, SSRState
 from homeassistant.components.sensor import (
     SensorEntityDescription,
 )
-from dataclasses import dataclass
+
 from typing import Callable, TypeVar
 from homeassistant.components.sensor import (
-    SensorEntity,
     SensorEntityDescription,
 )
 
