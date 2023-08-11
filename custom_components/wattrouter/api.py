@@ -27,6 +27,7 @@ _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 HEADERS = {"Content-type": "application/json; charset=UTF-8"}
 
+
 class WattrouterApiClient:
     """API client for Wattrouter."""
 
@@ -61,6 +62,12 @@ class WattrouterApiClient:
                 )
 
                 response_text = await response.text()
+
+                if response.status != 200:
+                    raise aiohttp.ClientConnectionError(
+                        f"Wattrouter server responded with not success code: '{response.status}'. Response: '{response_text}'"
+                    )
+
                 return response_text
 
         except asyncio.TimeoutError as exception:

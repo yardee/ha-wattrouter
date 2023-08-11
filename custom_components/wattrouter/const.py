@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Final
 
 DOMAIN: Final = "wattrouter"
-VERSION: Final = "0.0.6"
+VERSION: Final = "0.0.7"
 ATTR_MANUFACTURER: Final = "Solar controls"
 
 ENTITIES_PREFIX: Final = "Wattrouter"
