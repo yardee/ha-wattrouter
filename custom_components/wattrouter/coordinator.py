@@ -39,5 +39,5 @@ class WattrouterUpdateCoordinator(DataUpdateCoordinator[WattrouterStateData]):
             )
             return state
         except Exception as exception:
-            _LOGGER.error("Error fetching data: " + exception)
+            _LOGGER.error("Error fetching data: %s", exception)
             raise UpdateFailed() from exception

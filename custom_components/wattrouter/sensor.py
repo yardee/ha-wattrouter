@@ -30,6 +30,10 @@ async def async_setup_entry(
 ):
     """Setup sensor platform."""
     coordinator: WattrouterUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+    if coordinator.data is None:
+        _LOGGER.error("Sensors not added. Data not available.")
+        return
+
     entities = []
 
     for sensor in sensors:
@@ -241,54 +245,6 @@ sensors = [
         key="total_production_energy",
         name="Total Production Energy",
         state_getter=lambda s: s.day_stats.total_production_energy,
-        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        device_class=SensorDeviceClass.ENERGY,
-        state_class=SensorStateClass.TOTAL_INCREASING,
-    ),
-    BaseWattrouterSensorEntityDescription(
-        key="SSR1_energy",
-        name="SSR1 Energy",
-        state_getter=lambda s: s.day_stats.SSR1_energy,
-        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        device_class=SensorDeviceClass.ENERGY,
-        state_class=SensorStateClass.TOTAL_INCREASING,
-    ),
-    BaseWattrouterSensorEntityDescription(
-        key="SSR2_energy",
-        name="SSR2 Energy",
-        state_getter=lambda s: s.day_stats.SSR2_energy,
-        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        device_class=SensorDeviceClass.ENERGY,
-        state_class=SensorStateClass.TOTAL_INCREASING,
-    ),
-    BaseWattrouterSensorEntityDescription(
-        key="SSR3_energy",
-        name="SSR3 Energy",
-        state_getter=lambda s: s.day_stats.SSR3_energy,
-        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        device_class=SensorDeviceClass.ENERGY,
-        state_class=SensorStateClass.TOTAL_INCREASING,
-    ),
-    BaseWattrouterSensorEntityDescription(
-        key="SSR4_energy",
-        name="SSR4 Energy",
-        state_getter=lambda s: s.day_stats.SSR4_energy,
-        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        device_class=SensorDeviceClass.ENERGY,
-        state_class=SensorStateClass.TOTAL_INCREASING,
-    ),
-    BaseWattrouterSensorEntityDescription(
-        key="SSR5_energy",
-        name="SSR5 Energy",
-        state_getter=lambda s: s.day_stats.SSR5_energy,
-        unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
-        device_class=SensorDeviceClass.ENERGY,
-        state_class=SensorStateClass.TOTAL_INCREASING,
-    ),
-    BaseWattrouterSensorEntityDescription(
-        key="SSR6_energy",
-        name="SSR6 Energy",
-        state_getter=lambda s: s.day_stats.SSR6_energy,
         unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         device_class=SensorDeviceClass.ENERGY,
         state_class=SensorStateClass.TOTAL_INCREASING,

@@ -56,7 +56,8 @@ class IntegrationWattrouterEntity(CoordinatorEntity):
     @property
     def unique_id(self):
         """Return a unique ID to use for this entity."""
-        return f"{self.config_entry.entry_id}_{ENTITIES_PREFIX}_{self.entity_description.key}"
+        coordinator: WattrouterUpdateCoordinator = self.coordinator
+        return f"{coordinator.data.measurement.serial_number}_{self.entity_description.key}"
 
     @property
     def device_info(self):

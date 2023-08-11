@@ -1,5 +1,7 @@
 """Binary sensors platform for ote rates."""
 from homeassistant.config_entries import ConfigEntry
+import logging
+
 from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorDeviceClass,
@@ -13,12 +15,18 @@ from .entity import (
 )
 from .coordinator import WattrouterUpdateCoordinator
 
+_LOGGER: logging.Logger = logging.getLogger(__package__)
 
 async def async_setup_entry(
     hass, entry: ConfigEntry, async_add_devices: AddEntitiesCallback
 ):
     """Setup binary_sensor platform."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
+    coordinator: WattrouterUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
+
+    if coordinator.data is None:
+        _LOGGER.error("Binary sensors not added. Data not available.")
+        return
+
     entities = []
 
     for sensor in sensors:

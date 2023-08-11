@@ -3,7 +3,7 @@ import asyncio
 
 from homeassistant.core import HomeAssistant
 from homeassistant.const import CONF_NAME
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigError
 from homeassistant.const import Platform
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -37,6 +37,9 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     client = WattrouterApiClient(session, settings)
     coordinator = WattrouterUpdateCoordinator(hass, client=client, settings=settings)
     await coordinator.async_refresh()
+
+    if coordinator.last_update_success is False:
+        raise ConfigError("Cannot setup wattrouter") from coordinator.last_exception
 
     hass.data[DOMAIN][config_entry.entry_id] = coordinator
 
