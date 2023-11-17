@@ -377,6 +377,38 @@ sensors = [
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
     ),
+    BaseWattrouterSensorEntityDescription(
+        key="andi1_power",
+        name="ANDI1 Power",
+        state_getter=lambda s: s.measurement.andi1.power,
+        unit_of_measurement=UnitOfPower.KILO_WATT,
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    BaseWattrouterSensorEntityDescription(
+        key="andi2_power",
+        name="ANDI2 Power",
+        state_getter=lambda s: s.measurement.andi2.power,
+        unit_of_measurement=UnitOfPower.KILO_WATT,
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    BaseWattrouterSensorEntityDescription(
+        key="andi3_power",
+        name="ANDI3 Power",
+        state_getter=lambda s: s.measurement.andi3.power,
+        unit_of_measurement=UnitOfPower.KILO_WATT,
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    BaseWattrouterSensorEntityDescription(
+        key="andi4_power",
+        name="ANDI4 Power",
+        state_getter=lambda s: s.measurement.andi4.power,
+        unit_of_measurement=UnitOfPower.KILO_WATT,
+        device_class=SensorDeviceClass.POWER,
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
 ]
 
 

@@ -1,5 +1,6 @@
 colorlog
 homeassistant
-pip>=21.0,<23.1
-ruff==0.0.255
+pip
+ruff
 pytest
+numpy
