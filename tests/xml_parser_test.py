@@ -51,3 +51,24 @@ def test_parse_setting_should_parse_ssr1_time_plans():
         assert len(configuration.time_plans) == 64
         assert configuration.time_plans[0].name == "TS11"
         assert configuration.time_plans[0].state == TimePlanState.RESTRICT
+
+def test_parse_measurement_should_parse_andi_states():
+    with open("tests/measurement1.xml", "r", encoding="utf8") as file:
+        xml = file.read()
+        measurement = XmlParser().parse_measurement(xml)
+
+        assert measurement.andi1.power is None
+        assert measurement.andi1.binary_on is False
+        assert measurement.andi1.energy == 0.00
+
+        assert measurement.andi2.power is None
+        assert measurement.andi2.binary_on is True
+        assert measurement.andi2.energy == 0.00
+
+        assert measurement.andi3.power == 1.23
+        assert measurement.andi3.binary_on is None
+        assert measurement.andi3.energy == 0.29
+
+        assert measurement.andi4.power == 0.00
+        assert measurement.andi4.binary_on is None
+        assert measurement.andi4.energy == 0.5
