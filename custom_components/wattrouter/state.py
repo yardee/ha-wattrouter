@@ -16,6 +16,12 @@ class SSRState:
     limit_active: bool
     test_active: bool
 
+@dataclass
+class ANDIState:
+    """Class for keeping track of date prices."""
+    power: float | None
+    binary_on: bool | None
+    energy: float
 
 @dataclass
 class MeasurementData:
@@ -32,6 +38,10 @@ class MeasurementData:
     ssr4: SSRState
     ssr5: SSRState
     ssr6: SSRState
+    andi1: ANDIState
+    andi2: ANDIState
+    andi3: ANDIState
+    andi4: ANDIState
     relay1: SSRState
     relay2: SSRState
 

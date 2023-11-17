@@ -1,4 +1,3 @@
-"""Binary sensors platform for ote rates."""
 from homeassistant.config_entries import ConfigEntry
 import logging
 
@@ -31,7 +30,7 @@ async def async_setup_entry(
 
     for sensor in sensors:
         entities.append(
-            BaseOteBinarySensorEntity(
+            BaseBinarySensorEntity(
                 coordinator=coordinator, entity_description=sensor, config_entry=entry
             )
         )
@@ -121,6 +120,26 @@ sensors = [
         name="CombiWATT active",
         state_getter=lambda s: s.measurement.combiwatt_active,
     ),
+    BaseWattrouterSensorEntityDescription(
+        key="andi1_active",
+        name="ANDI1 active",
+        state_getter=lambda s: s.measurement.andi1.binary_on,
+    ),
+    BaseWattrouterSensorEntityDescription(
+        key="andi2_active",
+        name="ANDI2 active",
+        state_getter=lambda s: s.measurement.andi2.binary_on,
+    ),
+    BaseWattrouterSensorEntityDescription(
+        key="andi3_active",
+        name="ANDI3 active",
+        state_getter=lambda s: s.measurement.andi3.binary_on,
+    ),
+    BaseWattrouterSensorEntityDescription(
+        key="andi4_active",
+        name="ANDI4 active",
+        state_getter=lambda s: s.measurement.andi4.binary_on,
+    ),
 ]
 
 
@@ -148,7 +167,7 @@ class SSRBinarySensorEntity(IntegrationWattrouterEntity, BinarySensorEntity):
         return None
 
 
-class BaseOteBinarySensorEntity(IntegrationWattrouterEntity, BinarySensorEntity):
+class BaseBinarySensorEntity(IntegrationWattrouterEntity, BinarySensorEntity):
     """Base class for all binary sensor entities."""
 
     @property
@@ -169,24 +188,3 @@ class BaseOteBinarySensorEntity(IntegrationWattrouterEntity, BinarySensorEntity)
 
         return None
 
-
-class BaseOteBinarySensorEntity(IntegrationWattrouterEntity, BinarySensorEntity):
-    """Base class for all binary sensor entities."""
-
-    @property
-    def is_on(self):
-        """Return true if the binary_sensor is on."""
-        coordinator: WattrouterUpdateCoordinator = self.coordinator
-        if hasattr(self.entity_description, "state_getter"):
-            return self.entity_description.state_getter(coordinator.data)
-
-        return None
-
-    @property
-    def native_value(self):
-        """Return the native value of the sensor."""
-        coordinator: WattrouterUpdateCoordinator = self.coordinator
-        if hasattr(self.entity_description, "state_getter"):
-            return self.entity_description.state_getter(coordinator.data)
-
-        return None

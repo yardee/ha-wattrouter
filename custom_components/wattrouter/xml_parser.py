@@ -9,6 +9,7 @@ from custom_components.wattrouter.time_schedule_mode_parser import (
 from .state import (
     MeasurementData,
     SSRState,
+    ANDIState,
     SettingsData,
     TimePlanSettings,
     TimePlanState,
@@ -32,6 +33,10 @@ class XmlParser:
             ssr4=self.__get_ssr_state("O4", root),
             ssr5=self.__get_ssr_state("O5", root),
             ssr6=self.__get_ssr_state("O6", root),
+            andi1=self.__get_andi_state("I4", root),
+            andi2=self.__get_andi_state("I5", root),
+            andi3=self.__get_andi_state("I6", root),
+            andi4=self.__get_andi_state("I7", root),
             relay1=self.__get_ssr_state("O7", root),
             relay2=self.__get_ssr_state("O8", root),
             temperature1=float(root.find("DQ1").text),
@@ -122,4 +127,16 @@ class XmlParser:
             limit_active=bool(int(input.find("HR").text)),
             regulated=bool(int(input.find("HN").text)),
             test_active=bool(int(input.find("T").text)),
+        )
+
+    def __get_andi_state(self, input_name: str, root: ET.Element) -> ANDIState:
+        input = root.find(input_name)
+
+        power_text = input.find("P").text
+        binary_on = True if power_text == "1" else False if power_text == "0" else None
+
+        return ANDIState(
+            power=float(power_text) if binary_on is None else None,
+            energy=float(input.find("E").text),
+            binary_on=binary_on,
         )

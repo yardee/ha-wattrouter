@@ -9,5 +9,5 @@
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/yardee/ha-wattrouter/issues",
   "requirements": ["requests", "aiohttp", "asyncio"],
-  "version": "0.0.7"
+  "version": "0.1.0"
 }
