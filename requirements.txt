@@ -4,3 +4,4 @@ pip
 ruff
 pytest
 numpy
+async_timeout
