@@ -1,5 +1,6 @@
 from collections.abc import Mapping
 from typing import Any, cast
+import logging
 
 import voluptuous as vol
 from homeassistant.const import (
@@ -17,6 +18,7 @@ from .const import (
     CONF_URL,
     DOMAIN,
 )
+_LOGGER = logging.getLogger(__name__)
 
 CONFIG_SCHEMA = vol.Schema(
     {
@@ -30,13 +32,17 @@ CONFIG_FLOW: dict[str, SchemaFlowFormStep] = {
     "user": SchemaFlowFormStep(CONFIG_SCHEMA),
 }
 
+OPTIONS_FLOW: dict[str, SchemaFlowFormStep] = {
+    "init": SchemaFlowFormStep(CONFIG_SCHEMA),
+}
+
 
 class ConfigFlowHandler(SchemaConfigFlowHandler, domain=DOMAIN):
     # Handle a config or options flow for Utility Meter.
-
+    _LOGGER.info(f"starting configflow - domain = {DOMAIN}")
     config_flow = CONFIG_FLOW
-    options_flow = CONFIG_FLOW
+    options_flow = OPTIONS_FLOW
 
     def async_config_entry_title(self, options: Mapping[str, Any]) -> str:
-        # Return config entry title
+        _LOGGER.info(f"title configflow {DOMAIN} {CONF_NAME}: {options}")
         return cast(str, options[CONF_URL]) if CONF_URL in options else ""
