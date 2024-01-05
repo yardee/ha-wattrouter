@@ -38,7 +38,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     coordinator = WattrouterUpdateCoordinator(hass, client=client, settings=settings)
 
     config_entry.async_on_unload(config_entry.add_update_listener(async_reload_entry))
-    await coordinator.async_refresh()
+    await coordinator.async_config_entry_first_refresh()
 
     if coordinator.last_update_success is False:
         raise ConfigError("Cannot setup wattrouter") from coordinator.last_exception
