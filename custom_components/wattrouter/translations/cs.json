@@ -10,5 +10,17 @@
         }
       }
     }
+  },
+  "options": {
+    "step": {
+      "user": {
+        "title": "Nastavení Wattrouteru",
+        "data": {
+          "CONF_URL": "URL Wattrouteru",
+          "CONF_USERNAME": "Přihlašovací jméno",
+          "CONF_PASSWORD": "Heslo"
+        }
+      }
+    }
   }
 }

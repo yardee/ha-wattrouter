@@ -55,43 +55,17 @@ class WattrouterApiClient:
 
     async def __fetch_data(self, endpoint: str) -> MeasurementData:
         url = urljoin(self.settings.url, endpoint)
-        try:
-            async with async_timeout.timeout(TIMEOUT):
-                response = await self._session.get(
-                    url, headers={"Accept": "application/xml"}
+        async with async_timeout.timeout(TIMEOUT):
+            response = await self._session.get(
+                url, headers={"Accept": "application/xml"}
+            )
+
+            response_text = await response.text()
+
+            if response.status != 200:
+                raise aiohttp.ClientConnectionError(
+                    f"Wattrouter server responded with not success code: '{response.status}'. Response: '{response_text}'"
                 )
 
-                response_text = await response.text()
+            return response_text
 
-                if response.status != 200:
-                    raise aiohttp.ClientConnectionError(
-                        f"Wattrouter server responded with not success code: '{response.status}'. Response: '{response_text}'"
-                    )
-
-                return response_text
-
-        except asyncio.TimeoutError as exception:
-            _LOGGER.error(
-                "Timeout error fetching information from %s - %s",
-                url,
-                exception,
-            )
-
-        except (KeyError, TypeError) as exception:
-            _LOGGER.error(
-                "Error parsing information from %s - %s",
-                url,
-                exception,
-            )
-        except (aiohttp.ClientError, socket.gaierror) as exception:
-            _LOGGER.error(
-                "Error fetching information from %s - %s",
-                url,
-                exception,
-            )
-        except Exception as exception:  # pylint: disable=broad-except
-            _LOGGER.error(
-                "Error fetching information from %s - %s",
-                url,
-                exception,
-            )

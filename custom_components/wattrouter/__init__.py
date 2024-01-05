@@ -36,6 +36,8 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     session = async_get_clientsession(hass)
     client = WattrouterApiClient(session, settings)
     coordinator = WattrouterUpdateCoordinator(hass, client=client, settings=settings)
+
+    config_entry.async_on_unload(config_entry.add_update_listener(async_reload_entry))
     await coordinator.async_refresh()
 
     if coordinator.last_update_success is False:
@@ -49,24 +51,15 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Handle removal of an entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-    unloaded = all(
-        await asyncio.gather(
-            *[
-                hass.config_entries.async_forward_entry_unload(entry, platform)
-                for platform in PLATFORMS
-                if platform in coordinator.platforms
-            ]
-        )
-    )
-    if unloaded:
+    """Unload an Wattrouter config entry."""
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+
+    if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
 
-    return unloaded
+    return unload_ok
 
 
 async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Reload config entry."""
-    await async_unload_entry(hass, entry)
-    await async_setup_entry(hass, entry)
+    await hass.config_entries.async_reload(entry.entry_id)
