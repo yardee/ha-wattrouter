@@ -187,4 +187,3 @@ class BaseBinarySensorEntity(IntegrationWattrouterEntity, BinarySensorEntity):
             return self.entity_description.state_getter(coordinator.data)
 
         return None
-

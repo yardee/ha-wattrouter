@@ -35,6 +35,11 @@ class WattrouterUpdateCoordinator(DataUpdateCoordinator[WattrouterStateData]):
     async def _async_update_data(self) -> WattrouterStateData:
         """Update data via library."""
         try:
+            self.modbus_hub.write_all_autorepeated()
+        except Exception as exception:
+            _LOGGER.error("Error auto repeat modbus data: %s", exception)
+
+        try:
             state = WattrouterStateData(
                 measurement=await self.api.get_measurement(),
                 settings=await self.api.get_configuration(),
@@ -44,3 +49,5 @@ class WattrouterUpdateCoordinator(DataUpdateCoordinator[WattrouterStateData]):
         except Exception as exception:
             _LOGGER.error("Error fetching data: %s", exception)
             raise UpdateFailed() from exception
+
+

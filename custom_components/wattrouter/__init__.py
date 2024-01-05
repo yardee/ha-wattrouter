@@ -15,9 +15,10 @@ from .const import (
 )
 from .coordinator import WattrouterUpdateCoordinator, WattrouterSettings
 from .api import WattrouterApiClient
+from .wattrouter_modbus_hub import WattrouterModbusHub
 
 """OTE Rate sensor integration."""
-PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR]
+PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR, Platform.SWITCH]
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
@@ -35,13 +36,13 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
 
     session = async_get_clientsession(hass)
     client = WattrouterApiClient(session, settings)
-     hub = WattrouterModbusHub(hass, name, host, port, modbus_addr, interface, serial_port, baudrate, scan_interval, plugin, config)
+    hub = WattrouterModbusHub(hass, "modbus_name", "192.168.0.200", 502, 115200, 2)
 
-    coordinator = WattrouterUpdateCoordinator(hass, client=client, settings=settings)
+    coordinator = WattrouterUpdateCoordinator(hass, client=client, settings=settings, modbus_hub=hub)
 
 
-    """Register the hub."""
-    hass.data[DOMAIN][name] = { "hub": hub,  }
+    # """Register the hub."""
+    # hass.data[DOMAIN][name] = { "hub": hub,  }
 
 
     await coordinator.async_refresh()
