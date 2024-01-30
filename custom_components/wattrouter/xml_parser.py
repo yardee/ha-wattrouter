@@ -23,10 +23,10 @@ class XmlParser:
     def parse_measurement(self, xml: str) -> MeasurementData:
         root = ET.fromstring(xml)
         return MeasurementData(
-            i1_power=float(root.find("I1").find("P").text),
-            i2_power=float(root.find("I2").find("P").text),
-            i3_power=float(root.find("I3").find("P").text),
-            total_power=float(root.find("PPS").text),
+            i1_power=self.__parse_float(root.find("I1"), "P"),
+            i2_power=self.__parse_float(root.find("I2"), "P"),
+            i3_power=self.__parse_float(root.find("I3"), "P"),
+            total_power=self.__parse_float(root, "PPS"),
             ssr1=self.__get_ssr_state("O1", root),
             ssr2=self.__get_ssr_state("O2", root),
             ssr3=self.__get_ssr_state("O3", root),
@@ -39,11 +39,11 @@ class XmlParser:
             andi4=self.__get_andi_state("I7", root),
             relay1=self.__get_ssr_state("O7", root),
             relay2=self.__get_ssr_state("O8", root),
-            temperature1=float(root.find("DQ1").text),
-            temperature2=float(root.find("DQ2").text),
-            temperature3=float(root.find("DQ3").text),
-            temperature4=float(root.find("DQ4").text),
-            voltage=float(root.find("VAC").text),
+            temperature1=self.__parse_float(root, "DQ1"),
+            temperature2=self.__parse_float(root, "DQ2"),
+            temperature3=self.__parse_float(root, "DQ3"),
+            temperature4=self.__parse_float(root, "DQ4"),
+            voltage=self.__parse_float(root, "VAC"),
             firmware_version=root.find("FW").text,
             serial_number=root.find("SN").text,
             low_tariff_active=bool(int(root.find("ILT").text)),
@@ -58,40 +58,40 @@ class XmlParser:
     def parse_day_stats(self, xml: str) -> DayStats:
         root = ET.fromstring(xml)
         return DayStats(
-            L1_reverse_energy=float(root.find("SDS1").text),
-            L2_reverse_energy=float(root.find("SDS2").text),
-            L3_reverse_energy=float(root.find("SDS3").text),
-            total_reverse_energy=float(root.find("SDS4").text),
-            L1_forward_low_tariff_energy=float(root.find("SDL1").text),
-            L2_forward_low_tariff_energy=float(root.find("SDL2").text),
-            L3_forward_low_tariff_energy=float(root.find("SDL3").text),
-            total_forward_low_tariff_energy=float(root.find("SDL4").text),
-            L1_forward_high_tariff_energy=float(root.find("SDH1").text),
-            L2_forward_high_tariff_energy=float(root.find("SDH2").text),
-            L3_forward_high_tariff_energy=float(root.find("SDH3").text),
-            total_forward_high_tariff_energy=float(root.find("SDH4").text),
-            L1_production_energy=float(root.find("SDP1").text),
-            L2_production_energy=float(root.find("SDP2").text),
-            L3_production_energy=float(root.find("SDP3").text),
-            total_production_energy=float(root.find("SDP4").text),
-            SSR1_energy=float(root.find("SDO1").text),
-            SSR2_energy=float(root.find("SDO2").text),
-            SSR3_energy=float(root.find("SDO3").text),
-            SSR4_energy=float(root.find("SDO4").text),
-            SSR5_energy=float(root.find("SDO5").text),
-            SSR6_energy=float(root.find("SDO6").text),
-            relay1_energy=float(root.find("SDO7").text),
-            relay2_energy=float(root.find("SDO8").text),
-            wsl1_energy=float(root.find("SDO9").text),
-            wsl2_energy=float(root.find("SDO10").text),
-            wsl3_energy=float(root.find("SDO11").text),
-            wsl4_energy=float(root.find("SDO12").text),
-            wsl5_energy=float(root.find("SDO13").text),
-            wsl6_energy=float(root.find("SDO14").text),
-            andi1_energy=float(root.find("SDI1").text),
-            andi2_energy=float(root.find("SDI2").text),
-            andi3_energy=float(root.find("SDI3").text),
-            andi4_energy=float(root.find("SDI4").text),
+            L1_reverse_energy=self.__parse_float(root, "SDS1"),
+            L2_reverse_energy=self.__parse_float(root, "SDS2"),
+            L3_reverse_energy=self.__parse_float(root, "SDS3"),
+            total_reverse_energy=self.__parse_float(root, "SDS4"),
+            L1_forward_low_tariff_energy=self.__parse_float(root, "SDL1"),
+            L2_forward_low_tariff_energy=self.__parse_float(root, "SDL2"),
+            L3_forward_low_tariff_energy=self.__parse_float(root, "SDL3"),
+            total_forward_low_tariff_energy=self.__parse_float(root, "SDL4"),
+            L1_forward_high_tariff_energy=self.__parse_float(root, "SDH1"),
+            L2_forward_high_tariff_energy=self.__parse_float(root, "SDH2"),
+            L3_forward_high_tariff_energy=self.__parse_float(root, "SDH3"),
+            total_forward_high_tariff_energy=self.__parse_float(root, "SDH4"),
+            L1_production_energy=self.__parse_float(root, "SDP1"),
+            L2_production_energy=self.__parse_float(root, "SDP2"),
+            L3_production_energy=self.__parse_float(root, "SDP3"),
+            total_production_energy=self.__parse_float(root, "SDP4"),
+            SSR1_energy=self.__parse_float(root, "SDO1"),
+            SSR2_energy=self.__parse_float(root, "SDO2"),
+            SSR3_energy=self.__parse_float(root, "SDO3"),
+            SSR4_energy=self.__parse_float(root, "SDO4"),
+            SSR5_energy=self.__parse_float(root, "SDO5"),
+            SSR6_energy=self.__parse_float(root, "SDO6"),
+            relay1_energy=self.__parse_float(root, "SDO7"),
+            relay2_energy=self.__parse_float(root, "SDO8"),
+            wsl1_energy=self.__parse_float(root, "SDO9"),
+            wsl2_energy=self.__parse_float(root, "SDO10"),
+            wsl3_energy=self.__parse_float(root, "SDO11"),
+            wsl4_energy=self.__parse_float(root, "SDO12"),
+            wsl5_energy=self.__parse_float(root, "SDO13"),
+            wsl6_energy=self.__parse_float(root, "SDO14"),
+            andi1_energy=self.__parse_float(root, "SDI1"),
+            andi2_energy=self.__parse_float(root, "SDI2"),
+            andi3_energy=self.__parse_float(root, "SDI3"),
+            andi4_energy=self.__parse_float(root, "SDI4"),
         )
 
     def get_time_plans(self, root: ET.Element) -> array:
@@ -107,10 +107,10 @@ class XmlParser:
                             mode=int(time_plan.find("M").text),
                             start_str=time_plan.find("N").text,
                             end_str=time_plan.find("F").text,
-                            energy_limit=float(time_plan.find("Li").text),
-                            power_percentage=float(time_plan.find("P").text),
+                            energy_limit=self.__parse_float(time_plan, "Li"),
+                            power_percentage=self.__parse_float(time_plan, "P"),
                             temperature_input=int(time_plan.find("TI").text),
-                            temperature_threshold=float(time_plan.find("TT").text),
+                            temperature_threshold=self.__parse_float(time_plan, "TT"),
                         )
                     )
                 )
@@ -120,8 +120,8 @@ class XmlParser:
     def __get_ssr_state(self, input_name: str, root: ET.Element) -> SSRState:
         input = root.find(input_name)
         return SSRState(
-            power=float(input.find("P").text),
-            energy=float(input.find("E").text),
+            power=self.__parse_float(input, "P"),
+            energy=self.__parse_float(input, "E"),
             combiwatt_active=bool(int(input.find("HC").text)),
             forced_active=bool(int(input.find("HE").text)),
             limit_active=bool(int(input.find("HR").text)),
@@ -137,6 +137,11 @@ class XmlParser:
 
         return ANDIState(
             power=float(power_text) if binary_on is None else None,
-            energy=float(input.find("E").text),
+            energy=self.__parse_float(input, "E"),
             binary_on=binary_on,
         )
+
+    def __parse_float(self, element: ET.Element, key: str) -> float | None:
+        child = element.find(key)
+        text = child.text if child is not None else None
+        return float(text) if text is not None and text != "X.X" else None
