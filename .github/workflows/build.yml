@@ -1,0 +1,28 @@
+name: Build actions
+on:
+  release:
+    types: [published, created, edited]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get version
+        id: version
+        uses: home-assistant/actions/helpers/version@master
+
+      - name: Patch manifest and zip
+        run: |
+          sed -i 's/v0.0.0/${{ steps.version.outputs.version }}/' custom_components/wattrouter/manifest.json
+          sed -i 's/v0.0.0/${{ steps.version.outputs.version }}/' custom_components/wattrouter/const.py
+
+          cd custom_components/wattrouter/
+          zip ../../wattrouter.zip ./* translations/* -x '.*'
+      - uses: JasonEtco/upload-to-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: ./wattrouter.zip application/zip
