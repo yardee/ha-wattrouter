@@ -20,7 +20,7 @@ def test_parse_measurement_should_parse_temperatures():
         assert measurement.temperature1 == 14.0
         assert measurement.temperature2 == 55.0
         assert measurement.temperature3 == 34.0
-        assert measurement.temperature4 == 22.2
+        assert measurement.temperature4 is None
 
 
 def test_parse_measurement_should_parse_ssrs():
