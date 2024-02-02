@@ -6,19 +6,21 @@
         "data": {
           "CONF_URL": "URL of Wattrouter",
           "CONF_USERNAME": "Username",
-          "CONF_PASSWORD": "Password"
+          "CONF_PASSWORD": "Password",
+          "CONF_UPDATE_INTERVAL": "Update interval [s]"
         }
       }
     }
   },
   "options": {
     "step": {
-      "user": {
+      "init": {
         "title": "Define Wattrouter credentials",
         "data": {
           "CONF_URL": "URL of Wattrouter",
           "CONF_USERNAME": "Username",
-          "CONF_PASSWORD": "Password"
+          "CONF_PASSWORD": "Password",
+          "CONF_UPDATE_INTERVAL": "Update interval [s]"
         }
       }
     }

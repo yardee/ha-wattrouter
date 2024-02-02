@@ -17,6 +17,8 @@ from .const import (
     CONF_PASSWORD,
     CONF_URL,
     DOMAIN,
+    CONF_UPDATE_INTERVAL,
+    DEFAULT_UPDATE_INTERVAL
 )
 _LOGGER = logging.getLogger(__name__)
 
@@ -25,6 +27,11 @@ CONFIG_SCHEMA = vol.Schema(
         vol.Required(CONF_URL, default=""): str,
         vol.Required(CONF_USERNAME, default="admin"): str,
         vol.Required(CONF_PASSWORD, default="1234"): str,
+        vol.Required(CONF_UPDATE_INTERVAL, default=DEFAULT_UPDATE_INTERVAL): selector.NumberSelector(
+            selector.NumberSelectorConfig(
+                step=1, mode=selector.NumberSelectorMode.BOX, min=1, max=60
+            )
+        ),
     }
 )
 
