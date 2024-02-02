@@ -1,6 +1,6 @@
 import logging
 import asyncio
-
+from datetime import timedelta
 from homeassistant.core import HomeAssistant
 from homeassistant.const import CONF_NAME
 from homeassistant.config_entries import ConfigEntry, ConfigError
@@ -12,6 +12,8 @@ from .const import (
     CONF_URL,
     CONF_PASSWORD,
     CONF_USERNAME,
+    CONF_UPDATE_INTERVAL,
+    DEFAULT_UPDATE_INTERVAL
 )
 from .coordinator import WattrouterUpdateCoordinator, WattrouterSettings
 from .api import WattrouterApiClient
@@ -27,10 +29,13 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
         hass.data.setdefault(DOMAIN, {})
         _LOGGER.info("Wattrouter setup started")
 
+    update_interval = config_entry.options.get(CONF_UPDATE_INTERVAL, DEFAULT_UPDATE_INTERVAL)
+
     settings = WattrouterSettings(
         password=config_entry.options[CONF_PASSWORD],
         username=config_entry.options[CONF_USERNAME],
         url=config_entry.options[CONF_URL],
+        update_interval=timedelta(seconds=update_interval),
     )
 
     session = async_get_clientsession(hass)

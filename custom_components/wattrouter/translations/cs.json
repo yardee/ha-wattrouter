@@ -6,19 +6,21 @@
         "data": {
           "CONF_URL": "URL Wattrouteru",
           "CONF_USERNAME": "Přihlašovací jméno",
-          "CONF_PASSWORD": "Heslo"
+          "CONF_PASSWORD": "Heslo",
+          "CONF_UPDATE_INTERVAL": "Obnovovací interval [s]"
         }
       }
     }
   },
   "options": {
     "step": {
-      "user": {
+      "init": {
         "title": "Nastavení Wattrouteru",
         "data": {
           "CONF_URL": "URL Wattrouteru",
           "CONF_USERNAME": "Přihlašovací jméno",
-          "CONF_PASSWORD": "Heslo"
+          "CONF_PASSWORD": "Heslo",
+          "CONF_UPDATE_INTERVAL": "Obnovovací interval [s]"
         }
       }
     }
